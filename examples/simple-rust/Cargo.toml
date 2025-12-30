@@ -1,0 +1,42 @@
+[package]
+name = "llama-simple"
+version = "0.1.0"
+edition = "2021"
+description = "A pure Rust llama.cpp-compatible inference example"
+license = "MIT"
+
+[[bin]]
+name = "llama-simple"
+path = "src/main.rs"
+
+[dependencies]
+# Pure Rust ML framework with GGUF support
+candle-core = "0.8"
+candle-nn = "0.8"
+candle-transformers = "0.8"
+
+# Tokenizer
+tokenizers = "0.20"
+
+# CLI argument parsing
+clap = { version = "4.4", features = ["derive"] }
+
+# Error handling
+anyhow = "1.0"
+
+# For memory mapping model files
+memmap2 = "0.9"
+
+# For downloading models (optional)
+hf-hub = "0.3"
+
+[features]
+default = []
+cuda = ["candle-core/cuda", "candle-nn/cuda", "candle-transformers/cuda"]
+metal = ["candle-core/metal", "candle-nn/metal", "candle-transformers/metal"]
+accelerate = ["candle-core/accelerate", "candle-nn/accelerate", "candle-transformers/accelerate"]
+
+[profile.release]
+lto = true
+codegen-units = 1
+opt-level = 3
